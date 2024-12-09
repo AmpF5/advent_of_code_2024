@@ -3,6 +3,9 @@
 
 # IntelliJ project files
 .idea
+.vscode
+*/bin
+*/obj
 *.iml
 out
 gen
@@ -35,4 +38,3 @@ go.work.sum
 
 # Data
 *.txt
-
