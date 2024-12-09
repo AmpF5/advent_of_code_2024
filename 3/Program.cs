@@ -10,9 +10,28 @@ catch (Exception ex) {
     Console.WriteLine($"An error occurred: {ex.Message}");
     return;
 }
+bool enabled = true;
+int sumPart1 = 0, sumPart2 = 0;
 
-var sum = fileContent.SelectMany(ParseLine).Select(p => p.a * p.b).Sum();
-Console.WriteLine(sum);
+foreach(var match in fileContent.SelectMany(ParseLine)) {
+    if (match.Groups[1].Success && match.Groups[2].Success) {
+        int value = int.Parse(match.Groups[1].Value) * int.Parse(match.Groups[2].Value);
+        // Part 1
+        sumPart1 += value;
 
-static IEnumerable<(int a, int b)> ParseLine(string line) =>
-    Regex.Matches(line, @"mul\((\d+),(\d+)\)").Select(m => (int.Parse(m.Groups[1].Value), int.Parse(m.Groups[2].Value)));
+        // Part 2
+        if (enabled)
+            sumPart2 += value;
+    }
+    else if (match.Groups[3].Success)
+        enabled = false;
+        
+    else if (match.Groups[4].Success)
+        enabled = true;
+}
+
+System.Console.WriteLine("Part 1: " + sumPart1);
+System.Console.WriteLine("Part 2: " + sumPart2);
+
+static MatchCollection ParseLine(string line) =>
+    Regex.Matches(line, @"mul\((\d+),(\d+)\)|(don't)\(\)|(do)\(\)");
